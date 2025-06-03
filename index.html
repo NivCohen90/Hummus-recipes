@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he">
 <head>
@@ -85,7 +84,48 @@
 </div>
 
 <script>
-// ... All previous script content remains unchanged ...
+let isEnglish = false;
+
+function toggleLang() {
+  isEnglish = !isEnglish;
+  document.getElementById('main-title').innerText = isEnglish ? "🧆 Hummus Recipe Calculator" : "🧆 מחשבון מתכונים לחומוס";
+  document.getElementById('label-recipe').innerText = isEnglish ? "Select Recipe:" : "בחר מתכון:";
+  document.getElementById('label-grams').innerText = isEnglish ? "Enter weight of dry chickpeas (grams):" : "הכנס את משקל גרגרי החומוס (יבש, בגרמים):";
+  document.getElementById('btn-generate').innerText = isEnglish ? "Calculate Recipe" : "חשב מתכון";
+
+  const options = document.querySelectorAll('#recipeType option');
+  options[0].text = isEnglish ? "Classic Hummus" : "חומוס קלאסי";
+  options[1].text = isEnglish ? "Musabaha" : "מסבחה";
+  options[2].text = isEnglish ? "Hummus Ful" : "חומוס פול";
+  options[3].text = isEnglish ? "Sabich" : "סביח";
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+}
+
+function saveAsFavorite() {
+  const url = window.location.href;
+  const title = document.title;
+  try {
+    if (window.external && ('AddFavorite' in window.external)) {
+      window.external.AddFavorite(url, title);
+    } else {
+      alert(isEnglish ? "Use your browser menu to bookmark." : "השתמש בתפריט הדפדפן כדי לשמור.");
+    }
+  } catch (e) {
+    alert(isEnglish ? "Bookmarking not supported." : "הדפדפן לא תומך במועדפים.");
+  }
+}
+
+function shareWhatsApp() {
+  const text = document.getElementById('result').innerText;
+  const url = window.location.href;
+  const fullText = `${text}\n\n${url}`;
+  const encoded = encodeURIComponent(fullText);
+  window.open(`https://wa.me/?text=${encoded}`, '_blank');
+}
+
 function downloadPDF() {
   const element = document.createElement("div");
   element.style.direction = "rtl";
@@ -101,6 +141,148 @@ function downloadPDF() {
   };
 
   html2pdf().set(opt).from(element).save();
+}
+
+function generateRecipe() {
+  const grams = parseInt(document.getElementById('gramsInput').value);
+  const recipeType = document.getElementById('recipeType').value;
+  const resultDiv = document.getElementById('result');
+  const shareBtn = document.getElementById('extra-buttons');
+
+  if (isNaN(grams) || grams < 100) {
+    resultDiv.innerText = isEnglish ? "⚠️ Please enter a valid weight (min 100g)" : "⚠️ נא להזין מספר תקני (מעל 100 גרם)";
+    shareBtn.style.display = "none";
+    return;
+  }
+
+  const factor = grams / 250;
+  const servings = Math.round(factor * 3);
+  let output = isEnglish
+    ? `📄 Recipe for ${getRecipeName(recipeType)} using ${grams}g:\n🍽️ Estimated servings: ${servings}–${servings + 2}\n\n`
+    : `🧾 מתכון ל-${getRecipeName(recipeType)} לפי ${grams} גרם:\n🍽️ מספר מנות משוער: ${servings}–${servings + 2}\n\n`;
+
+  switch (recipeType) {
+    case 'classic': output += generateClassicRecipe(factor); break;
+    case 'mesabaha': output += generateMesabahaRecipe(factor); break;
+    case 'ful': output += generateFulRecipe(factor); break;
+    case 'sabich': output += generateSabichRecipe(factor); break;
+    default: output += isEnglish ? "Recipe not found." : "מתכון לא זמין.";
+  }
+
+  resultDiv.innerText = output;
+  shareBtn.style.display = "block";
+}
+
+function getRecipeName(type) {
+  const names = {
+    classic: isEnglish ? "Classic Hummus" : "חומוס קלאסי",
+    mesabaha: isEnglish ? "Musabaha" : "מסבחה",
+    ful: isEnglish ? "Hummus Ful" : "חומוס פול",
+    sabich: isEnglish ? "Sabich" : "סביח"
+  };
+  return names[type] || "";
+}
+
+function generateClassicRecipe(f) {
+  const tahini = (0.75 * f).toFixed(2);
+  const lemon = (0.25 * f).toFixed(2);
+  const garlic = Math.round(2 * f);
+  const salt = (1 * f).toFixed(2);
+  const cumin = (0.5 * f).toFixed(2);
+  const soak = (1 * f).toFixed(2);
+  const cook = (0.5 * f).toFixed(2);
+  const water = (0.75 * f).toFixed(2);
+
+  return isEnglish ? `
+Step 1 – Soaking:
+- Rinse chickpeas and soak with ${soak} tsp baking soda for 12–24 hours.
+
+Step 2 – Cooking:
+- Cook with fresh water and ${cook} tsp baking soda until very soft.
+- Save ${water} cups of cooking water.
+
+Step 3 – Blending:
+- Blend hot chickpeas with:
+  • ${tahini} cups tahini
+  • ${lemon} cups lemon juice
+  • ${garlic} garlic cloves
+  • ${salt} tsp salt
+  • ${cumin} tsp cumin
+  • Add cooking water gradually
+
+Step 4 – Cool & serve:
+- Refrigerate 1 hour before serving.
+  ` : `
+📌 שלב 1 – השרייה:
+- שוטפים את הגרגרים ומשרים בהרבה מים עם ${soak} כפיות סודה לשתייה ל-12–24 שעות.
+
+📌 שלב 2 – בישול:
+- מבשלים את הגרגרים במים חדשים עם ${cook} כפיות סודה לשתייה עד לריכוך מוחלט.
+- שומרים ${water} כוסות ממי הבישול.
+
+📌 שלב 3 – טחינה:
+- טוחנים את הגרגרים החמים יחד עם:
+  • ${tahini} כוסות טחינה
+  • ${lemon} כוסות מיץ לימון
+  • ${garlic} שיני שום
+  • ${salt} כפיות מלח
+  • ${cumin} כפיות כמון
+  • מוסיפים ממי הבישול עד למרקם קרמי
+
+📌 שלב 4 – קירור:
+- מקררים שעה לפני הגשה.
+`;
+}
+
+function generateMesabahaRecipe(f) {
+  return isEnglish ? `
+- Prepare chickpeas as in classic hummus.
+- Mix tahini, lemon juice, garlic, salt, cumin, and some cooking water.
+- Add whole chickpeas and serve warm.
+` : `
+📌 מכינים את גרגרי החומוס כמו במתכון הקלאסי.
+
+📌 מערבבים בקערה:
+• טחינה
+• מיץ לימון
+• שום
+• מלח
+• כמון
+• מים מהבישול
+
+📌 מוסיפים גרגרים חמים שלמים ומגישים.
+`;
+}
+
+function generateFulRecipe(f) {
+  return isEnglish ? `
+- Prepare hummus.
+- Cook fava beans with garlic, lemon, salt, cumin.
+- Serve fava beans on hummus, top with oil and parsley.
+` : `
+📌 מכינים חומוס רגיל.
+
+📌 מבשלים פול עם שום, לימון, מלח וכמון.
+
+📌 יוצקים מעל החומוס ומוסיפים שמן זית ופטרוזיליה.
+`;
+}
+
+function generateSabichRecipe(f) {
+  return isEnglish ? `
+- Prepare hummus.
+- Fry eggplant slices.
+- Add hard-boiled eggs.
+- Serve with tahini, amba, salad, parsley.
+` : `
+📌 מכינים חומוס רגיל.
+
+📌 מטגנים חציל פרוס.
+
+📌 מוסיפים ביצים קשות.
+
+📌 מגישים עם טחינה, עמבה, סלט קצוץ.
+`;
 }
 </script>
 
