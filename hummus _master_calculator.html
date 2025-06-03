@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>מחשבון מתכונים לחומוס</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      padding: 20px;
+      background-color: #fdf6ec;
+    }
+    h1 {
+      text-align: center;
+      color: #6a4f3a;
+    }
+    label, select, input, button {
+      font-size: 1.1em;
+      margin: 10px 0;
+    }
+    #result {
+      margin-top: 25px;
+      white-space: pre-line;
+      background: #fff8f0;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    img {
+      max-width: 100%;
+      margin: 15px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧆 מחשבון מתכונים לחומוס</h1>
+
+<label for="recipeType">בחר מתכון:</label>
+<select id="recipeType">
+  <option value="classic">חומוס קלאסי</option>
+  <option value="mesabaha">מסבחה</option>
+  <option value="ful">חומוס פול</option>
+  <option value="sabich">סביח</option>
+</select>
+
+<br>
+
+<label for="gramsInput">הכנס את משקל גרגרי החומוס (יבש, בגרמים):</label>
+<br>
+<input type="number" id="gramsInput" value="250" min="100" step="50">
+<button onclick="generateRecipe()">חשב מתכון</button>
+<button onclick="downloadPDF()">📥 הורד כ-PDF</button>
+
+<div id="result"></div>
+
+<script>
+function generateRecipe() {
+  const grams = parseInt(document.getElementById('gramsInput').value);
+  const recipeType = document.getElementById('recipeType').value;
+  if (isNaN(grams) || grams < 100) {
+    document.getElementById('result').innerText = "⚠️ נא להזין מספר תקני (מעל 100 גרם)";
+    return;
+  }
+
+  const factor = grams / 250;
+
+  let output = `🧾 מתכון ל-${getRecipeName(recipeType)} לפי ${grams} גרם גרגרים:\n\n`;
+
+  switch (recipeType) {
+    case 'classic':
+      output += generateClassicRecipe(factor);
+      break;
+    case 'mesabaha':
+      output += generateMesabahaRecipe(factor);
+      break;
+    case 'ful':
+      output += generateFulRecipe(factor);
+      break;
+    case 'sabich':
+      output += generateSabichRecipe(factor);
+      break;
+    default:
+      output += "מתכון לא זמין.";
+  }
+
+  document.getElementById('result').innerText = output;
+}
+
+function getRecipeName(type) {
+  switch (type) {
+    case 'classic': return 'חומוס קלאסי';
+    case 'mesabaha': return 'מסבחה';
+    case 'ful': return 'חומוס פול';
+    case 'sabich': return 'סביח';
+    default: return '';
+  }
+}
+
+function generateClassicRecipe(factor) {
+  const tahini = (0.75 * factor).toFixed(2);
+  const lemon = (0.25 * factor).toFixed(2);
+  const garlic = Math.round(2 * factor);
+  const salt = (1 * factor).toFixed(2);
+  const cumin = (0.5 * factor).toFixed(2);
+  const sodaSoak = (1 * factor).toFixed(2);
+  const sodaCook = (0.5 * factor).toFixed(2);
+  const water = (0.75 * factor).toFixed(2);
+
+  return `📌 שלב 1 – השרייה:
+- שוטפים את הגרגרים ומשרים בהרבה מים עם ${sodaSoak} כפיות סודה לשתייה ל-12–24 שעות.
+
+📌 שלב 2 – בישול:
+- מבשלים את הגרגרים במים חדשים עם ${sodaCook} כפיות סודה לשתייה עד לריכוך מוחלט (כשעתיים).
+- שומרים ${water} כוסות ממי הבישול.
+
+📌 שלב 3 – טחינה:
+- טוחנים את הגרגרים החמים יחד עם:
+  • ${tahini} כוסות טחינה גולמית
+  • ${lemon} כוסות מיץ לימון טרי
+  • ${garlic} שיני שום
+  • ${salt} כפיות מלח
+  • ${cumin} כפיות כמון
+  • מוסיפים ממי הבישול בהדרגה עד שמתקבל מרקם חלק וקרמי.
+
+📌 שלב 4 – קירור:
+- מכניסים למקרר לשעה לפני ההגשה.
+
+בהצלחה ובתיאבון! 😋`;
+}
+
+function generateMesabahaRecipe(factor) {
+  const tahini = (0.5 * factor).toFixed(2);
+  const lemon = (0.25 * factor).toFixed(2);
+  const garlic = Math.round(1 * factor);
+  const salt = (0.5 * factor).toFixed(2);
+  const cumin = (0.5 * factor).toFixed(2);
+  const sodaSoak = (1 * factor).toFixed(2);
+  const sodaCook = (0.5 * factor).toFixed(2);
+  const water = (0.5 * factor).toFixed(2);
+
+  return `📌 שלב 1 – השרייה:
+- שוטפים את הגרגרים ומשרים בהרבה מים עם ${sodaSoak} כפיות סודה לשתייה ל-12–24 שעות.
+
+📌 שלב 2 – בישול:
+- מבשלים את הגרגרים במים חדשים עם ${sodaCook} כפיות סודה לשתייה עד לריכוך מוחלט (כשעתיים).
+- שומרים ${water} כוסות ממי הבישול.
+
+📌 שלב 3 – הכנה:
+- מערבבים בקערה:
+  • ${tahini} כוסות טחינה גולמית
+  • ${lemon} כוסות מיץ לימון טרי
+  • ${garlic} שיני שום כתוש
+  • ${salt} כפיות מלח
+  • ${cumin} כפיות כמון
+  • מוסיפים ממי הבישול בהדרגה עד למרקם רצוי.
+- מוסיפים את גרגרי החומוס החמים ומערבבים בעדינות.
+
+📌 שלב 4 – הגשה:
+- מזלפים שמן זית מעל ומפזרים פטרוזיליה קצוצה.
+
+בתיאבון! 😋`;
+}
+
+function generateFulRecipe(factor) {
+  const tahini = (0.75 * factor).toFixed(2);
+  const lemon = (0.33 * factor).toFixed(2);
+  const garlic = Math.round(2 * factor);
+  const salt = (1 * factor).toFixed(2);
+  const cumin = (0.5 * factor).toFixed(2);
+  const sodaSoak = (1 * factor).toFixed(2);
+  const sodaCook = (0.5 * factor).toFixed(2);
+  const water = (0.75 * factor).toFixed(2);
+
+  return `📌 שלב 1 – השרייה:
+- שוטפים את הגרגרים ומשרים בהרבה מים עם ${sodaSoak} כפיות סודה לשתייה ל-12–24 שעות.
+
+📌 שלב 2 – בישול:
+- מבשלים את הגרגרים במים חדשים עם ${sodaCook} כפיות סודה לשתייה עד לריכוך מוחלט (כשעתיים).
+- שומרים ${water} כוסות ממי הבישול.
+
+📌 שלב 3 – הכנת החומוס:
+- טוחנים את הגרגרים החמים יחד עם:
+  • ${tahini} כוסות טחינה גולמית
+  • ${lemon} כוסות מיץ לימון טרי
+  • ${garlic} שיני שום
+  • ${salt} כפיות מלח
+  • ${cumin} כפיות כמון
+  • מוסיפים ממי הבישול בהדרגה עד שמתקבל מרקם חלק וקרמי.
+
+📌 שלב 4 – הכנת הפול:
+- מבשלים פול עד לריכוך, מוסיפים כמון, שום, מיץ לימון ומלח לפי הטעם.
+
+📌 שלב 5 – הגשה:
+- יוצקים את החומוס לצלחת, מעליו את הפול, מזלפים שמן זית ומפזרים פטרוזיליה קצוצה.
+
+בתיאבון! 😋`;
+}
+
+function generateSabichRecipe(factor) {
+  const tahini = (0.75 * factor).toFixed(2);
+  const lemon = (0.25 * factor).toFixed(2);
+  const garlic = Math.round(2 * factor);
+  const salt = (1 * factor).toFixed(2);
+  const cumin = (0.5 * factor).toFixed(2);
+  const sodaSoak = (1 * factor).toFixed(2);
+  const sodaCook = (0.5 * factor).toFixed(2);
+  const water = (0.75 * factor).toFixed(2);
+
+  return `📌 שלב 1 – השרייה:
+- שוטפים את הגרגרים ומשרים בהרבה מים עם ${sodaSoak} כפיות ס 
