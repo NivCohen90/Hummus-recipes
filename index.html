@@ -118,6 +118,10 @@ function toggleLang() {
     .innerText = isEnglish ? '🌓 Dark Mode' : '🌓 מצב לילה';
   document.querySelector('button[onclick="saveAsFavorite()"]')
     .innerText = isEnglish ? '⭐ Add to Favorites' : '⭐ שמור במועדפים';
+  document.getElementById('page-footer').innerText =
+    isEnglish
+      ? 'Version 1.0 | Last updated: June 2025 | Made with love for hummus 🍋'
+      : 'גרסה 1.0 | עודכן לאחרונה: יוני 2025 | נבנה באהבה לחומוס 🍋';
 }
 
 function toggleDarkMode() {
@@ -312,7 +316,7 @@ function generateSabichRecipe(f) {
 }
 </script>
 
-<footer style="margin-top:40px; font-size:0.9em; text-align:center;">
+<footer id="page-footer" style="margin-top:40px; font-size:0.9em; text-align:center;">
   גרסה 1.0 | עודכן לאחרונה: יוני 2025 | נבנה באהבה לחומוס 🍋
 </footer>
 
