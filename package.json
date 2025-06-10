@@ -1,0 +1,10 @@
+{
+  "name": "hummus-recipes",
+  "version": "1.0.0",
+  "description": "Simple hummus recipe calculator website",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"No tests specified\"",
+    "start": "serve ."
+  }
+}
