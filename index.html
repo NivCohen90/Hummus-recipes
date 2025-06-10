@@ -11,7 +11,21 @@
   <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/6/60/Hummus-plate.jpg">
   <meta property="og:url" content="https://example.com/">
   <meta property="og:site_name" content="מחשבון מתכונים לחומוס">
+  <link rel="canonical" href="https://example.com/">
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/60/Hummus-plate.jpg" type="image/jpeg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "name": "Hummus Recipe Calculator",
+    "description": "כלי אינטרנטי לחישוב מתכוני חומוס ולהורדה ב‑PDF.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/6/60/Hummus-plate.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Niv Cohen"
+    }
+  }
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body {
@@ -87,7 +101,8 @@
 
 <div id="result"></div>
 <div id="extra-buttons" style="margin-top:10px; display:none;">
-  <button onclick="shareWhatsApp()">📲 שתף בוואטסאפ</button>
+  <button id="copy-btn" onclick="copyToClipboard()">📋 העתק ללוח</button>
+  <button id="share-btn" onclick="shareWhatsApp()">📲 שתף בוואטסאפ</button>
 </div>
 
 <script>
@@ -112,8 +127,10 @@ function toggleLang() {
   options[3].text = isEnglish ? "Sabich" : "סביח";
   document.querySelector('button[onclick="downloadPDF()"]')
     .innerText = isEnglish ? '📥 Download PDF' : '📥 הורד כ-PDF';
-  document.querySelector('#extra-buttons button')
-    .innerText = isEnglish ? '📲 Share on WhatsApp' : '📲 שתף בוואטסאפ';
+  document.getElementById('copy-btn').innerText =
+    isEnglish ? '📋 Copy' : '📋 העתק ללוח';
+  document.getElementById('share-btn').innerText =
+    isEnglish ? '📲 Share on WhatsApp' : '📲 שתף בוואטסאפ';
   document.querySelector('button[onclick="toggleDarkMode()"]')
     .innerText = isEnglish ? '🌓 Dark Mode' : '🌓 מצב לילה';
   document.querySelector('button[onclick="saveAsFavorite()"]')
@@ -148,6 +165,17 @@ function shareWhatsApp() {
   const fullText = `${text}\n\n${url}`;
   const encoded = encodeURIComponent(fullText);
   window.open(`https://wa.me/?text=${encoded}`, '_blank');
+}
+
+function copyToClipboard() {
+  const text = document.getElementById('result').innerText.trim();
+  if (!text) {
+    alert(isEnglish ? 'Please generate a recipe first.' : 'אנא צור מתכון קודם.');
+    return;
+  }
+  navigator.clipboard.writeText(text)
+    .then(() => alert(isEnglish ? 'Copied!' : 'הועתק ללוח!'))
+    .catch(() => alert(isEnglish ? 'Copy failed.' : 'ההעתקה נכשלה.'));
 }
 
 function downloadPDF() {
@@ -300,12 +328,12 @@ function generateFulRecipe(f) {
 
 function generateSabichRecipe(f) {
   return isEnglish ? `
-- Prepare hummus.
-- Fry eggplant slices.
-- Add hard-boiled eggs.
-- Serve with tahini, amba, salad, parsley.
-` : `
-📌 מכינים חומוס רגיל.
+  - Prepare hummus.
+  - Fry eggplant slices.
+  - Add hard-boiled eggs.
+  - Serve with tahini, amba, salad, parsley.
+  ` : `
+  📌 מכינים חומוס רגיל.
 
 📌 מטגנים חציל פרוס.
 
@@ -313,6 +341,12 @@ function generateSabichRecipe(f) {
 
 📌 מגישים עם טחינה, עמבה, סלט קצוץ.
 `;
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js');
+  });
 }
 </script>
 
