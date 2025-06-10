@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <title>מחשבון מתכונים לחומוס</title>
@@ -96,9 +96,9 @@ let isEnglish = false;
 function toggleLang() {
   isEnglish = !isEnglish;
   document.documentElement.lang = isEnglish ? 'en' : 'he';
+  document.documentElement.dir = isEnglish ? 'ltr' : 'rtl';
   document.getElementById('main-title').innerText = isEnglish ? "🧆 Hummus Recipe Calculator" : "🧆 מחשבון מתכונים לחומוס";
   document.title = isEnglish ? "Hummus Recipe Calculator" : "מחשבון מתכונים לחומוס";
-  document.documentElement.lang = isEnglish ? 'en' : 'he';
   document.body.style.direction = isEnglish ? 'ltr' : 'rtl';
   document.getElementById('result').style.direction = isEnglish ? 'ltr' : 'rtl';
   document.getElementById('label-recipe').innerText = isEnglish ? "Select Recipe:" : "בחר מתכון:";
