@@ -147,11 +147,16 @@ function shareWhatsApp() {
 }
 
 function downloadPDF() {
+  const text = document.getElementById('result').innerText.trim();
+  if (!text) {
+    alert(isEnglish ? 'Please generate a recipe first.' : 'אנא צור מתכון קודם.');
+    return;
+  }
   const element = document.createElement("div");
   element.style.direction = isEnglish ? "ltr" : "rtl";
   element.style.padding = "20px";
   element.style.whiteSpace = "pre-line";
-  element.innerText = document.getElementById("result").innerText;
+  element.innerText = text;
 
   const opt = {
     margin: 0.5,
