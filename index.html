@@ -97,6 +97,10 @@ function toggleLang() {
   isEnglish = !isEnglish;
   document.documentElement.lang = isEnglish ? 'en' : 'he';
   document.getElementById('main-title').innerText = isEnglish ? "🧆 Hummus Recipe Calculator" : "🧆 מחשבון מתכונים לחומוס";
+  document.title = isEnglish ? "Hummus Recipe Calculator" : "מחשבון מתכונים לחומוס";
+  document.documentElement.lang = isEnglish ? 'en' : 'he';
+  document.body.style.direction = isEnglish ? 'ltr' : 'rtl';
+  document.getElementById('result').style.direction = isEnglish ? 'ltr' : 'rtl';
   document.getElementById('label-recipe').innerText = isEnglish ? "Select Recipe:" : "בחר מתכון:";
   document.getElementById('label-grams').innerText = isEnglish ? "Enter weight of dry chickpeas (grams):" : "הכנס את משקל גרגרי החומוס (יבש, בגרמים):";
   document.getElementById('btn-generate').innerText = isEnglish ? "Calculate Recipe" : "חשב מתכון";
@@ -106,6 +110,14 @@ function toggleLang() {
   options[1].text = isEnglish ? "Musabaha" : "מסבחה";
   options[2].text = isEnglish ? "Hummus Ful" : "חומוס פול";
   options[3].text = isEnglish ? "Sabich" : "סביח";
+  document.querySelector('button[onclick="downloadPDF()"]')
+    .innerText = isEnglish ? '📥 Download PDF' : '📥 הורד כ-PDF';
+  document.querySelector('#extra-buttons button')
+    .innerText = isEnglish ? '📲 Share on WhatsApp' : '📲 שתף בוואטסאפ';
+  document.querySelector('button[onclick="toggleDarkMode()"]')
+    .innerText = isEnglish ? '🌓 Dark Mode' : '🌓 מצב לילה';
+  document.querySelector('button[onclick="saveAsFavorite()"]')
+    .innerText = isEnglish ? '⭐ Add to Favorites' : '⭐ שמור במועדפים';
 }
 
 function toggleDarkMode() {
@@ -136,7 +148,7 @@ function shareWhatsApp() {
 
 function downloadPDF() {
   const element = document.createElement("div");
-  element.style.direction = "rtl";
+  element.style.direction = isEnglish ? "ltr" : "rtl";
   element.style.padding = "20px";
   element.style.whiteSpace = "pre-line";
   element.innerText = document.getElementById("result").innerText;
