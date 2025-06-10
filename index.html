@@ -130,6 +130,7 @@ function downloadPDF() {
   const element = document.createElement("div");
   element.style.direction = "rtl";
   element.style.padding = "20px";
+  element.style.whiteSpace = "pre-line";
   element.innerText = document.getElementById("result").innerText;
 
   const opt = {
