@@ -95,6 +95,7 @@ let isEnglish = false;
 
 function toggleLang() {
   isEnglish = !isEnglish;
+  document.documentElement.lang = isEnglish ? 'en' : 'he';
   document.getElementById('main-title').innerText = isEnglish ? "🧆 Hummus Recipe Calculator" : "🧆 מחשבון מתכונים לחומוס";
   document.getElementById('label-recipe').innerText = isEnglish ? "Select Recipe:" : "בחר מתכון:";
   document.getElementById('label-grams').innerText = isEnglish ? "Enter weight of dry chickpeas (grams):" : "הכנס את משקל גרגרי החומוס (יבש, בגרמים):";
