@@ -1,0 +1,10 @@
+{
+  "name": "hummus-recipes",
+  "version": "1.0.0",
+  "description": "Hummus recipe calculator",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"No tests specified\"",
+    "start": "npx serve -s ."
+  }
+}
